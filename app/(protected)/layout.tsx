@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/layout/Sidebar";
+import { MobileNav } from "@/components/layout/mobile-nav";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -22,10 +23,10 @@ export default async function ProtectedLayout({
             <div className="hidden w-64 md:block">
                 <Sidebar className="h-full" user={user} />
             </div>
-            <main className="flex-1 overflow-y-auto w-full">
+            <main className="flex-1 overflow-y-auto w-full pb-20 md:pb-0">
                 {children}
             </main>
-            {/* Mobile Nav would go here (bottom bar or hamburger) - Omitted for MVP step 1 */}
+            <MobileNav />
         </div>
     );
 }
