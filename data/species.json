@@ -1,0 +1,141 @@
+[
+    {
+        "id": "phragmites",
+        "commonName": "European Common Reed (Phragmites)",
+        "scientificName": "Phragmites australis",
+        "category": "plant",
+        "threatLevel": "high",
+        "primaryRegion": "Ontario",
+        "regions": [
+            "ON",
+            "QC",
+            "MB",
+            "NB",
+            "NS"
+        ],
+        "country": "Canada",
+        "isOntarioPriority": true,
+        "description": "A tall, aggressive reed that invades wetlands and beaches, outcompeting native plants and altering hydrology.",
+        "identificationTips": [
+            "Height: Up to 5 metres tall.",
+            "Leaves: Blue-green, smooth edges.",
+            "Seedhead: Dense, fluffy, purple-brown turning grey-white in winter."
+        ],
+        "lookAlikes": [
+            "Native Phragmites (subsp. americanus) - usually smaller, reddish stems."
+        ],
+        "recommendedAction": "Report immediately. Do not transport rhizomes or seeds.",
+        "imageKey": "phragmites-img"
+    },
+    {
+        "id": "emerald-ash-borer",
+        "commonName": "Emerald Ash Borer",
+        "scientificName": "Agrilus planipennis",
+        "category": "insect",
+        "threatLevel": "high",
+        "primaryRegion": "Ontario",
+        "regions": [
+            "ON",
+            "QC",
+            "MB",
+            "NB",
+            "NS"
+        ],
+        "country": "Canada",
+        "isOntarioPriority": true,
+        "description": "A metallic green beetle that bores into ash trees, disrupting nutrient flow and killing the tree.",
+        "identificationTips": [
+            "Adults: Metallic green, bullet-shaped, 8.5–14mm long.",
+            "Larvae: Creamy white, segmented, found under bark.",
+            "Signs: D-shaped exit holes in bark, crown dieback."
+        ],
+        "lookAlikes": [
+            "Six-spotted Tiger Beetle (different shape, spots)."
+        ],
+        "recommendedAction": "Don't move firewood. Report sightings on ash trees.",
+        "imageKey": "eab-img"
+    },
+    {
+        "id": "zebra-mussel",
+        "commonName": "Zebra Mussel",
+        "scientificName": "Dreissena polymorpha",
+        "category": "aquatic",
+        "threatLevel": "high",
+        "primaryRegion": "Ontario",
+        "regions": [
+            "ON",
+            "QC",
+            "MB"
+        ],
+        "country": "Canada",
+        "isOntarioPriority": true,
+        "description": "Small freshwater mussels that attach to hard surfaces, clogging pipes and outcompeting native mussels.",
+        "identificationTips": [
+            "Shell: Triangular/D-shaped, up to 3cm.",
+            "Pattern: Zig-zag dark stripes on light background.",
+            "Sits flat on ventral side."
+        ],
+        "lookAlikes": [
+            "Quagga Mussel (rounder, paler)."
+        ],
+        "recommendedAction": "Clean, Drain, Dry your boat. Report if found in new lakes.",
+        "imageKey": "zebra-mussel-img"
+    },
+    {
+        "id": "garlic-mustard",
+        "commonName": "Garlic Mustard",
+        "scientificName": "Alliaria petiolata",
+        "category": "plant",
+        "threatLevel": "medium",
+        "primaryRegion": "Ontario",
+        "regions": [
+            "ON",
+            "QC",
+            "BC",
+            "NB",
+            "NS",
+            "PE"
+        ],
+        "country": "Canada",
+        "isOntarioPriority": false,
+        "description": "A biennial herb that dominates forest floors and interferes with soil fungi needed by trees.",
+        "identificationTips": [
+            "First year: Rosette of kidney-shaped leaves.",
+            "Second year: Tall stalk (up to 1m) with white 4-petaled flowers.",
+            "Smell: Strong garlic odour when crushed."
+        ],
+        "lookAlikes": [
+            "Creeping Charlie (vine-like)."
+        ],
+        "recommendedAction": "Pull by hand including root before seeds set.",
+        "imageKey": "garlic-mustard-img"
+    },
+    {
+        "id": "spongy-moth",
+        "commonName": "Spongy Moth",
+        "scientificName": "Lymantria dispar",
+        "category": "insect",
+        "threatLevel": "high",
+        "primaryRegion": "Ontario",
+        "regions": [
+            "ON",
+            "QC",
+            "NB",
+            "NS",
+            "PE"
+        ],
+        "country": "Canada",
+        "isOntarioPriority": true,
+        "description": "A defoliating moth that strips leaves from hardwood trees like Oak and Maple.",
+        "identificationTips": [
+            "Caterpillars: 5 pairs of blue spots, 6 pairs of red spots on back.",
+            "Egg masses: Tan, fuzzy patches on tree trunks.",
+            "Adult Male: Brown moth. Adult Female: White moth (flightless)."
+        ],
+        "lookAlikes": [
+            "Forest Tent Caterpillar (keyhole pattern, no red/blue spots)."
+        ],
+        "recommendedAction": "Scrape egg masses in winter. Burlap band trees in summer.",
+        "imageKey": "spongy-moth-img"
+    }
+]

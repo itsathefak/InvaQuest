@@ -1,0 +1,38 @@
+[
+    {
+        "id": "id1",
+        "imageUrl": "https://images.unsplash.com/photo-1596329388147-380d6039545b?q=80&w=2940&auto=format&fit=crop",
+        "difficulty": "easy",
+        "choices": [
+            {
+                "id": "fern",
+                "label": "Native Fern",
+                "isInvasive": false
+            },
+            {
+                "id": "garlic-mustard",
+                "label": "Garlic Mustard",
+                "isInvasive": true
+            }
+        ],
+        "explanation": "Garlic Mustard (likely visible here) is highly invasive and crowds out native wildflowers like Trilliums."
+    },
+    {
+        "id": "id2",
+        "imageUrl": "https://images.unsplash.com/photo-1629831968852-78d91024225d?q=80&w=2835&auto=format&fit=crop",
+        "difficulty": "medium",
+        "choices": [
+            {
+                "id": "phragmites",
+                "label": "Invasive Phragmites",
+                "isInvasive": true
+            },
+            {
+                "id": "cattail",
+                "label": "Native Cattail",
+                "isInvasive": false
+            }
+        ],
+        "explanation": "Phragmites grows much taller (up to 5m) and has denser seed heads than native cattails."
+    }
+]

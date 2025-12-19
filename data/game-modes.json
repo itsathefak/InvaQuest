@@ -1,0 +1,29 @@
+[
+    {
+        "id": "ontario-plants",
+        "name": "Ontario Plants Challenge",
+        "description": "Test your knowledge of Ontario's most unwanted plants.",
+        "categoryFilter": "plant",
+        "regionFilter": "Ontario",
+        "xpReward": 50,
+        "icon": "leaf"
+    },
+    {
+        "id": "aquatic-invaders",
+        "name": "Aquatic Invaders",
+        "description": "Identify the threats lurking in Canada's lakes and rivers.",
+        "categoryFilter": "aquatic",
+        "regionFilter": null,
+        "xpReward": 50,
+        "icon": "droplet"
+    },
+    {
+        "id": "insect-insight",
+        "name": "Insect Insight",
+        "description": "Can you spot the difference between a harmless bug and a pest?",
+        "categoryFilter": "insect",
+        "regionFilter": null,
+        "xpReward": 50,
+        "icon": "bug"
+    }
+]

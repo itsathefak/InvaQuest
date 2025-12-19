@@ -1,0 +1,68 @@
+{
+    "landing": {
+        "heroButtons": [
+            {
+                "title": "FEED",
+                "description": "Like, comment, and track the community's latest sightings in real-time.",
+                "href": "/feed",
+                "color": "from-amber-500 to-orange-600",
+                "icon": "rss"
+            },
+            {
+                "title": "MAP",
+                "description": "Find invasive hotspots near you and claim territory for your team.",
+                "href": "/map",
+                "color": "from-blue-500 to-indigo-600",
+                "icon": "map"
+            },
+            {
+                "title": "SPECIES",
+                "description": "Identify invaders and learn how to protect your local ecosystem.",
+                "href": "/species",
+                "color": "from-emerald-500 to-teal-600",
+                "icon": "leaf"
+            }
+        ],
+        "hero": {
+            "title": "INVAQUEST",
+            "subtitle": "Gamify your conservation impact. Hunt invasive species, earn rewards, and protect biodiversity.",
+            "ctaPrimary": "Start Spotting",
+            "ctaSecondary": "View Map"
+        },
+        "gameShowcase": [
+            {
+                "title": "Geo Guesser",
+                "description": "Test your location skills. Guess the invasive species based on street view environments.",
+                "image": "/images/play/geoguesser-card.png",
+                "href": "/play/geoguesser",
+                "color": "from-cyan-500 to-blue-600"
+            },
+            {
+                "title": "Invasive Quiz",
+                "description": "Challenge your knowledge. Identify species and learn facts to climb the leaderboard.",
+                "image": "/images/play/quiz-card.png",
+                "href": "/play/quiz",
+                "color": "from-violet-500 to-purple-600"
+            },
+            {
+                "title": "Puzzle",
+                "description": "Reveal the invader tile by tile. The faster you identify it, the more XP you earn.",
+                "image": "/images/play/identify-card.png",
+                "href": "/play/puzzle",
+                "color": "from-emerald-500 to-green-600"
+            }
+        ],
+        "regionDisclaimer": "Powered by Youth Eco Stewards"
+    },
+    "nav": {
+        "logo": "InvaQuest",
+        "items": [
+            "Map",
+            "Species",
+            "Play",
+            "Leaderboard",
+            "Field Notes",
+            "Profile"
+        ]
+    }
+}

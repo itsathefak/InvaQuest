@@ -1,0 +1,54 @@
+[
+    {
+        "id": "q1",
+        "difficulty": "easy",
+        "question": "Which of these is a major invasive plant in Ontario wetlands?",
+        "options": [
+            "White Trillium",
+            "Phragmites (Common Reed)",
+            "Cattail",
+            "Blue Flag Iris"
+        ],
+        "correctIndex": 1,
+        "category": "plants"
+    },
+    {
+        "id": "q2",
+        "difficulty": "easy",
+        "question": "The Emerald Ash Borer primarily attacks which type of tree?",
+        "options": [
+            "Oak",
+            "Pine",
+            "Ash",
+            "Maple"
+        ],
+        "correctIndex": 2,
+        "category": "insects"
+    },
+    {
+        "id": "q3",
+        "difficulty": "medium",
+        "question": "Zebra mussels are native to which region?",
+        "options": [
+            "Great Lakes",
+            "Caspian Sea region",
+            "Mississippi River",
+            "Hudson Bay"
+        ],
+        "correctIndex": 1,
+        "category": "aquatic"
+    },
+    {
+        "id": "q4",
+        "difficulty": "hard",
+        "question": "Which year was the Asian Long-horned Beetle first detected in Canada?",
+        "options": [
+            "1996",
+            "2003",
+            "2011",
+            "1985"
+        ],
+        "correctIndex": 1,
+        "category": "insects"
+    }
+]

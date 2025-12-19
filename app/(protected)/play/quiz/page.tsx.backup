@@ -1,0 +1,385 @@
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import { ArrowLeft, CheckCircle2, XCircle, Loader2, Trophy, Sparkles, Clock, Zap } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { type Difficulty } from "@/types/games";
+import { cn } from "@/lib/utils";
+
+interface QuizQuestion {
+    id: string;
+    question: string;
+    options: string[];
+    correct_answer: number;
+    explanation: string;
+    category: string;
+}
+
+const TIME_LIMITS = {
+    easy: 30,
+    medium: 45,
+    hard: 60
+};
+
+export default function QuizPage() {
+    const [difficulty, setDifficulty] = React.useState<Difficulty>("easy");
+    const [questions, setQuestions] = React.useState<QuizQuestion[]>([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
+    const [score, setScore] = React.useState(0);
+    const [isFinished, setIsFinished] = React.useState(false);
+    const [selectedAnswer, setSelectedAnswer] = React.useState<number | null>(null);
+    const [showFeedback, setShowFeedback] = React.useState(false);
+    const [isLoading, setIsLoading] = React.useState(false);
+    const [timeRemaining, setTimeRemaining] = React.useState(TIME_LIMITS.easy);
+    const [totalTimeTaken, setTotalTimeTaken] = React.useState(0);
+    const [gameResults, setGameResults] = React.useState<any>(null);
+    const [showResults, setShowResults] = React.useState(false);
+
+    const currentQuestion = questions[currentQuestionIndex];
+    const timeLimit = TIME_LIMITS[difficulty];
+
+    // Timer effect
+    React.useEffect(() => {
+        if (!currentQuestion || showFeedback || isFinished) return;
+
+        const timer = setInterval(() => {
+            setTimeRemaining(prev => {
+                if (prev <= 1) {
+                    // Time's up - auto-submit wrong answer
+                    handleTimeout();
+                    return 0;
+                }
+                return prev - 1;
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [currentQuestionIndex, showFeedback, isFinished, currentQuestion]);
+
+    const loadQuestions = async (diff: Difficulty) => {
+        setIsLoading(true);
+        setTimeRemaining(TIME_LIMITS[diff]);
+        try {
+            const response = await fetch('/api/quiz/start', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ difficulty: diff })
+            });
+
+            if (!response.ok) throw new Error('Failed to load questions');
+
+            const data = await response.json();
+            setQuestions(data.questions);
+        } catch (error) {
+            console.error('Error loading questions:', error);
+            alert('Failed to load quiz questions. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    React.useEffect(() => {
+        loadQuestions(difficulty);
+    }, []);
+
+    const handleTimeout = () => {
+        setSelectedAnswer(-1); // -1 indicates timeout
+        setShowFeedback(true);
+
+        setTimeout(() => {
+            if (currentQuestionIndex < questions.length - 1) {
+                setCurrentQuestionIndex(prev => prev + 1);
+                setSelectedAnswer(null);
+                setShowFeedback(false);
+                setTimeRemaining(timeLimit);
+            } else {
+                finishQuiz();
+            }
+        }, 2000);
+    };
+
+    const handleAnswer = (index: number) => {
+        if (showFeedback) return;
+
+        const timeTaken = timeLimit - timeRemaining;
+        setTotalTimeTaken(prev => prev + timeTaken);
+
+        setSelectedAnswer(index);
+        setShowFeedback(true);
+
+        const isCorrect = index === currentQuestion.correct_answer;
+        if (isCorrect) {
+            setScore(prev => prev + 1);
+        }
+
+        setTimeout(() => {
+            if (currentQuestionIndex < questions.length - 1) {
+                setCurrentQuestionIndex(prev => prev + 1);
+                setSelectedAnswer(null);
+                setShowFeedback(false);
+                setTimeRemaining(timeLimit);
+            } else {
+                finishQuiz();
+            }
+        }, 2000);
+    };
+
+    const finishQuiz = async () => {
+        setIsFinished(true);
+
+        // Submit results
+        try {
+            const response = await fetch('/api/games/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    gameType: 'quiz',
+                    difficulty,
+                    score,
+                    maxScore: questions.length,
+                    timeTaken: totalTimeTaken,
+                    timeLimit: timeLimit * questions.length
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setGameResults(data);
+                setTimeout(() => setShowResults(true), 500);
+            }
+        } catch (error) {
+            console.error('Error submitting quiz:', error);
+        }
+    };
+
+    const resetQuiz = () => {
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setIsFinished(false);
+        setSelectedAnswer(null);
+        setShowFeedback(false);
+        setTotalTimeTaken(0);
+        setGameResults(null);
+        setShowResults(false);
+        loadQuestions(difficulty);
+    };
+
+    const changeDifficulty = (newDiff: Difficulty) => {
+        setDifficulty(newDiff);
+        setCurrentQuestionIndex(0);
+        setScore(0);
+        setIsFinished(false);
+        setSelectedAnswer(null);
+        setShowFeedback(false);
+        setTotalTimeTaken(0);
+        setGameResults(null);
+        setShowResults(false);
+        loadQuestions(newDiff);
+    };
+
+    if (isLoading) {
+        return (
+            <div className="container mx-auto px-4 py-8 max-w-2xl h-[calc(100vh-4rem)] flex flex-col justify-center items-center">
+                <Loader2 className="w-12 h-12 animate-spin text-teal-500 mb-4" />
+                <p className="text-slate-400">Loading quiz questions...</p>
+            </div>
+        );
+    }
+
+    if (isFinished) {
+        const percentage = Math.round((score / questions.length) * 100);
+        const isPerfect = score === questions.length;
+
+        return (
+            <div className="container mx-auto px-4 py-8 max-w-2xl h-[calc(100vh-4rem)] flex flex-col justify-center">
+                <Card className="bg-slate-900 border-white/10 p-8 text-center space-y-6 animate-in zoom-in-95 relative overflow-hidden">
+                    {isPerfect && (
+                        <div className="absolute inset-0 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 animate-pulse" />
+                    )}
+
+                    <div className="relative z-10">
+                        <Trophy className={cn(
+                            "w-24 h-24 mx-auto mb-4",
+                            isPerfect ? "text-yellow-500" : "text-teal-500"
+                        )} />
+
+                        <h2 className="text-3xl font-bold text-white mb-2">
+                            {isPerfect ? "Perfect Score! 🎉" : "Quiz Completed!"}
+                        </h2>
+
+                        <p className="text-slate-400 text-lg mb-4">
+                            You scored <span className="text-teal-400 font-bold text-2xl">{score}</span> out of <span className="text-white">{questions.length}</span>
+                        </p>
+
+                        <div className="text-sm text-slate-500 mb-6">
+                            {percentage}% correct • {difficulty} difficulty
+                        </div>
+
+                        {showResults && gameResults && (
+                            <div className="space-y-4 mb-6">
+                                <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg p-4 animate-in slide-in-from-bottom">
+                                    <div className="flex items-center justify-center gap-2 text-purple-300 mb-2">
+                                        <Sparkles className="w-5 h-5" />
+                                        <span className="font-bold text-2xl">+{gameResults.xpEarned} XP Earned!</span>
+                                        <Sparkles className="w-5 h-5" />
+                                    </div>
+                                    {isPerfect && (
+                                        <p className="text-xs text-purple-400">Includes +50 XP perfect score bonus!</p>
+                                    )}
+                                    {gameResults.leveledUp && (
+                                        <p className="text-sm text-yellow-400 mt-2 font-semibold">
+                                            🎊 Level Up! You're now Level {gameResults.newLevel}!
+                                        </p>
+                                    )}
+                                </div>
+
+                                <div className="grid grid-cols-2 gap-3 text-sm">
+                                    <div className="bg-slate-800/50 rounded-lg p-3">
+                                        <div className="text-slate-400">Total XP</div>
+                                        <div className="text-white font-bold text-lg">{gameResults.totalXP}</div>
+                                    </div>
+                                    <div className="bg-slate-800/50 rounded-lg p-3">
+                                        <div className="text-slate-400">Level</div>
+                                        <div className="text-teal-400 font-bold text-lg">{gameResults.newLevel}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="flex gap-4 justify-center pt-4">
+                            <Link href="/play">
+                                <Button variant="outline">Back to Hub</Button>
+                            </Link>
+                            <Button onClick={resetQuiz} className="bg-teal-600 hover:bg-teal-500">
+                                Play Again
+                            </Button>
+                        </div>
+                    </div>
+                </Card>
+            </div>
+        );
+    }
+
+    if (!currentQuestion) {
+        return (
+            <div className="container mx-auto px-4 py-8 text-center text-white">
+                <p>No questions available.</p>
+                <Button onClick={() => loadQuestions(difficulty)} className="mt-4">Reload</Button>
+            </div>
+        );
+    }
+
+    const timePercentage = (timeRemaining / timeLimit) * 100;
+    const isTimeRunningOut = timeRemaining <= 10;
+
+    return (
+        <div
+            className="relative min-h-screen w-full overflow-hidden"
+            style={{
+                backgroundImage: 'var(--image-gradient-mesh)',
+                backgroundAttachment: 'fixed'
+            }}
+        >
+            <div className="container mx-auto px-4 py-6 max-w-3xl min-h-[calc(100vh-4rem)] flex flex-col">
+                {/* Header */}
+                <div className="flex items-center justify-between mb-6">
+                    <Link href="/play" className="flex items-center text-slate-400 hover:text-white transition-colors">
+                        <ArrowLeft className="w-4 h-4 mr-2" />
+                        Back
+                    </Link>
+                    <div className="flex gap-2 bg-slate-900/50 p-1 rounded-lg">
+                        {(['easy', 'medium', 'hard'] as const).map((d) => (
+                            <button
+                                key={d}
+                                onClick={() => changeDifficulty(d)}
+                                className={cn(
+                                    "px-3 py-1 rounded-md text-sm capitalize transition-all",
+                                    difficulty === d ? "bg-teal-600 text-white font-medium" : "text-slate-400 hover:text-white"
+                                )}
+                            >
+                                {d}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+                isTimeRunningOut ? "bg-red-500/20 text-red-400 animate-pulse" : "bg-slate-800 text-slate-300"
+                    )}>
+                <Clock className="w-4 h-4" />
+                {timeRemaining}s
+            </div>
+        </div>
+
+                {/* Timer Progress Bar */ }
+    <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+        <div
+            className={cn(
+                "h-full transition-all duration-1000",
+                isTimeRunningOut ? "bg-red-500" : "bg-teal-500"
+            )}
+            style={{ width: `${timePercentage}%` }}
+        />
+    </div>
+            </div >
+
+        {/* Question */ }
+        < div className = "flex-1 flex flex-col justify-center pb-12" >
+                <div className="mb-4">
+                    <span className="text-xs text-teal-400 font-semibold uppercase tracking-wider">
+                        {currentQuestion.category}
+                    </span>
+                </div>
+
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 leading-relaxed">
+                    {currentQuestion.question}
+                </h2>
+
+                <div className="grid grid-cols-1 gap-4">
+                    {currentQuestion.options.map((option, idx) => {
+                        const isSelected = selectedAnswer === idx;
+                        const isCorrect = idx === currentQuestion.correct_answer;
+                        const isTimeout = selectedAnswer === -1;
+
+                        let stateStyles = "bg-slate-800/50 border-white/5 hover:bg-slate-800 hover:border-white/20 cursor-pointer";
+                        if (showFeedback) {
+                            if (isCorrect) stateStyles = "bg-green-500/20 border-green-500 text-green-200";
+                            else if (isSelected && !isCorrect) stateStyles = "bg-red-500/20 border-red-500 text-red-200";
+                            else if (isTimeout && isCorrect) stateStyles = "bg-yellow-500/20 border-yellow-500 text-yellow-200";
+                            else stateStyles = "bg-slate-900/30 border-transparent opacity-50";
+                        }
+
+                        return (
+                            <button
+                                key={idx}
+                                disabled={showFeedback}
+                                onClick={() => handleAnswer(idx)}
+                                className={cn(
+                                    "p-6 rounded-xl border text-left text-lg font-medium transition-all duration-200 flex items-center justify-between group",
+                                    stateStyles,
+                                    !showFeedback && "hover:scale-[1.02]"
+                                )}
+                            >
+                                <span>{option}</span>
+                                {showFeedback && isCorrect && <CheckCircle2 className="w-6 h-6 text-green-500" />}
+                                {showFeedback && isSelected && !isCorrect && <XCircle className="w-6 h-6 text-red-500" />}
+                            </button>
+                        );
+                    })}
+                </div>
+
+    {/* Explanation */ }
+    {
+        showFeedback && (
+            <div className="mt-6 p-4 bg-slate-800/50 border border-white/10 rounded-lg animate-in fade-in slide-in-from-bottom">
+                <p className="text-sm text-slate-300">
+                    <span className="font-semibold text-teal-400">Explanation: </span>
+                    {currentQuestion.explanation}
+                </p>
+            </div>
+        )
+    }
+            </div >
+        </div >
+    );
+}

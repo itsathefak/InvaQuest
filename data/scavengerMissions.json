@@ -1,0 +1,32 @@
+[
+    {
+        "id": "scav1",
+        "title": "The Reed Menace",
+        "region": "Ontario",
+        "difficulty": "easy",
+        "description": "Find and photograph a patch of Phragmites near a roadside or wetland.",
+        "xpReward": 50,
+        "requiresPhoto": true,
+        "status": "not_started"
+    },
+    {
+        "id": "scav2",
+        "title": "Beetle Detective",
+        "region": "Ontario",
+        "difficulty": "hard",
+        "description": "Examine 5 Ash trees for D-shaped exit holes (signs of Emerald Ash Borer).",
+        "xpReward": 100,
+        "requiresPhoto": true,
+        "status": "in_progress"
+    },
+    {
+        "id": "scav3",
+        "title": "Mussel Beach",
+        "region": "BC",
+        "difficulty": "medium",
+        "description": "Inspect a boat or dock for Zebra Mussels.",
+        "xpReward": 75,
+        "requiresPhoto": true,
+        "status": "not_started"
+    }
+]

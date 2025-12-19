@@ -1,0 +1,26 @@
+[
+    {
+        "id": "geo1",
+        "title": "Wetland Invasion",
+        "imageUrl": "https://images.unsplash.com/photo-1440613905118-99b921706b5c?q=80&w=2940&auto=format&fit=crop",
+        "difficulty": "easy",
+        "regionScope": "ontario",
+        "correctCoordinates": {
+            "lat": 43.6532,
+            "lng": -79.3832
+        },
+        "hint": "This tall grass is near a major city center. Look for the CN Tower in the distance."
+    },
+    {
+        "id": "geo2",
+        "title": "Forest Path",
+        "imageUrl": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2940&auto=format&fit=crop",
+        "difficulty": "medium",
+        "regionScope": "ontario",
+        "correctCoordinates": {
+            "lat": 45.4215,
+            "lng": -75.6972
+        },
+        "hint": "This diverse forest trail is located in the National Capital Region."
+    }
+]

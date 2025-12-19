@@ -1,0 +1,43 @@
+{
+    "xpActions": {
+        "sighting_submitted": 50,
+        "sighting_confirmed": 100,
+        "quiz_completed": 20,
+        "daily_login": 10,
+        "first_share": 30
+    },
+    "badges": [
+        {
+            "id": "novice-scout",
+            "name": "Novice Scout",
+            "description": "Submit your first sighting.",
+            "threshold": 1,
+            "iconKey": "badge-novice",
+            "regionScoped": false
+        },
+        {
+            "id": "ontario-guardian",
+            "name": "Ontario Guardian",
+            "description": "Submit 5 confirmed sightings in Ontario.",
+            "threshold": 5,
+            "iconKey": "badge-on-guardian",
+            "regionScoped": true
+        },
+        {
+            "id": "aquatic-defender",
+            "name": "Aquatic Defender",
+            "description": "Report 3 aquatic invasive species.",
+            "threshold": 3,
+            "iconKey": "badge-aquatic",
+            "regionScoped": false
+        },
+        {
+            "id": "knowledge-seeker",
+            "name": "Knowledge Seeker",
+            "description": "Complete 5 quizzes with >80% score.",
+            "threshold": 5,
+            "iconKey": "badge-brain",
+            "regionScoped": false
+        }
+    ]
+}
