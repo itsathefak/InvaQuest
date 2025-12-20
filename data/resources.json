@@ -1,0 +1,56 @@
+{
+    "resources": [
+        {
+            "slug": "understanding-invasive-species",
+            "title": "Understanding Invasive Species",
+            "description": "Learn what makes a species invasive and why they pose significant conservation threats worldwide.",
+            "heroImage": "/images/resources/invasive-species-hero.jpg",
+            "category": "Fundamentals",
+            "readTime": "5 min read",
+            "publishedDate": "2025-12-20",
+            "pdfUrl": "/pdf/1.pdf",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "An invasive species is one that arrives (often with human assistance) in a habitat it had not previously occupied, then establishes a population and spreads autonomously. Species invasions are one of the main conservation threats today and have caused many species extinctions."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "The great majority of such invasions are by species introduced from elsewhere, although some native species have become invasive in newly occupied habitats. In some areas of the world—especially islands—introduced species comprise a large proportion of all species."
+                },
+                {
+                    "type": "heading",
+                    "text": "Examples Around the World"
+                },
+                {
+                    "type": "paragraph",
+                    "text": "For instance, for the Hawaiian islands, almost half the plant species, 25% of insects, 40% of birds, and most freshwater fishes are introduced, while the analogous figures for Florida are 27% of plant species, 8% of insects, 5% of birds, and 24% of freshwater fishes."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Not all introduced species become invasive, however. Many plant species imported as ornamentals persist in cultivation but do not spread beyond gardens and parks."
+                },
+                {
+                    "type": "heading",
+                    "text": "Native Invasives"
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Although the great majority of invasive species are introduced, occasionally native plant species have become invasive, spreading rapidly into previously unoccupied habitats. These invasions fall into two categories, both involving human activities."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "In the first category, a native species that is rather restricted in range and habitat is supplemented with introductions from afar that have new genotypes, and the new genotypes, or recombinants involving the new genotypes, become invasive."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "An example in North America is common reed (Phragmites australis), which was present for at least thousands of years and is probably native, but which spread widely, became much more common, and began occupying more habitats beginning in the mid-nineteenth century. This invasion is wholly due to the introduction of Old World genotypes at that time, probably in soil ballast."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "The second category of native invasives arises from human modification of the environment. For instance, in western Europe, the grass Elymus athericus, previously a minor component of high intertidal vegetation, began spreading seaward because of increased nitrogen in both aerial deposition and runoff, and it now occupies most of the intertidal in many areas."
+                }
+            ]
+        }
+    ]
+}

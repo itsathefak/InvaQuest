@@ -69,7 +69,7 @@ export function Sidebar({ className, user }: { className?: string; user?: any })
         { name: "Species", href: "/species", icon: Leaf },
         { name: "Play", href: "/play", icon: Award },
         { name: "Leaderboard", href: "/leaderboard", icon: Trophy },
-        { name: "Field Notes", href: "/field-notes", icon: ClipboardList },
+        { name: "Resources", href: "/resources", icon: ClipboardList },
         { name: "Profile", href: "/profile", icon: User },
     ];
 
