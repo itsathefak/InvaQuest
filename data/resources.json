@@ -51,6 +51,66 @@
                     "text": "The second category of native invasives arises from human modification of the environment. For instance, in western Europe, the grass Elymus athericus, previously a minor component of high intertidal vegetation, began spreading seaward because of increased nitrogen in both aerial deposition and runoff, and it now occupies most of the intertidal in many areas."
                 }
             ]
+        },
+        {
+            "slug": "international-day-biodiversity",
+            "title": "International Day for Biological Diversity",
+            "description": "Discover why the UN designated May 22nd to raise awareness about invasive alien species and their global impact on ecosystems.",
+            "heroImage": "/images/resources/biodiversity-day-hero.jpg",
+            "category": "Global Impact",
+            "readTime": "6 min read",
+            "publishedDate": "2025-12-20",
+            "pdfUrl": "/pdf/2.pdf",
+            "content": [
+                {
+                    "type": "paragraph",
+                    "text": "To increase understanding and raise awareness of biodiversity issues, the United Nations declared 22 May the International Day for Biological Diversity (IDB). This year, the Convention on Biological Diversity proclaimed invasive alien species as the theme of IDB 2009."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "The rapid increase of biological invasions by alien species is widely recognized as being a significant component of human-induced global environmental change. While there is no doubt that the transportation of animals, plants and microorganisms provides a variety of goods and services and contributes to human well-being, global economic growth has opened pathways for invasive alien species to enter, establish and spread to new habitats and ecosystems."
+                },
+                {
+                    "type": "heading",
+                    "text": "The Economic Impact"
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Biological invasions by invasive alien species often results in significant economic losses and decreased biological diversity and ecosystem function. In the United States alone, the yearly damage and control cost of invasive species is estimated to be more than US$138 billion. Worldwide, it is estimated at US$1.4 trillion annually."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "In light of the impact invasive alien species have, the Convention on Biological Diversity recognizes the importance of preventing the introduction of, and controlling or eradicating alien species which threaten ecosystems, habitats and native species."
+                },
+                {
+                    "type": "heading",
+                    "text": "Key Messages"
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Invasive alien species have affected native biodiversity in almost every type of ecosystem on Earth. As one of the greatest drivers of biodiversity loss, they pose a threat to ecosystem integrity and function and therefore, to human well-being."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Globalization has resulted in greater levels of trade, transport, travel and tourism, all of which can facilitate the introduction and spread of non-native (or alien) species. Some of these can establish themselves in the new habitat and become invasive."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "For an alien species to become invasive, it must arrive, survive and thrive. It must successfully out-compete native organisms for food and habitat, spread through its new environment, increase its population and harm ecosystems in its introduced range."
+                },
+                {
+                    "type": "heading",
+                    "text": "Prevention is Key"
+                },
+                {
+                    "type": "paragraph",
+                    "text": "Prevention is the most cost-effective and feasible method of controlling invasive alien species. It requires collaboration among governments, economic sectors and non-governmental and international organizations."
+                },
+                {
+                    "type": "paragraph",
+                    "text": "The Convention on Biological Diversity (CBD) is addressing the threat of invasive alien species by setting global priorities and guidelines, as well as collecting information and facilitating the coordination of international actions."
+                }
+            ]
         }
     ]
 }
