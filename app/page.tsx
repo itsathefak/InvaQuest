@@ -110,7 +110,7 @@ export default async function Home() {
               {uiText.landing.gameShowcase.map((game, i) => (
                 <Link
                   key={i}
-                  href={user ? game.href : "/auth/login"}
+                  href={user ? game.href : `/auth/login?next=${encodeURIComponent(game.href)}`}
                   className="group relative h-64 md:h-80 rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-primary/20 border border-white/10 hover:border-white/30"
                 >
                   {/* Background Image */}

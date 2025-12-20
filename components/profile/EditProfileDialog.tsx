@@ -13,6 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 import { Loader2, Upload } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +31,7 @@ interface EditProfileDialogProps {
         id: string;
         displayName: string;
         avatarUrl?: string;
+        region?: string;
     };
     trigger?: React.ReactNode;
 }
@@ -31,6 +39,7 @@ interface EditProfileDialogProps {
 export function EditProfileDialog({ user, trigger }: EditProfileDialogProps) {
     const [open, setOpen] = React.useState(false);
     const [displayName, setDisplayName] = React.useState(user.displayName);
+    const [province, setProvince] = React.useState(user.region || "ON");
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = React.useState<string | null>(user.avatarUrl || null);
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -92,6 +101,7 @@ export function EditProfileDialog({ user, trigger }: EditProfileDialogProps) {
                 .update({
                     full_name: displayName,
                     avatar_url: avatarPath,
+                    region: province,
                     updated_at: new Date().toISOString(),
                 })
                 .eq('id', user.id);
@@ -161,6 +171,33 @@ export function EditProfileDialog({ user, trigger }: EditProfileDialogProps) {
                             onChange={(e) => setDisplayName(e.target.value)}
                             className="col-span-3 bg-slate-950 border-white/10 text-white"
                         />
+                    </div>
+
+                    {/* Province Select */}
+                    <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="province" className="text-right">
+                            Province
+                        </Label>
+                        <Select value={province} onValueChange={setProvince}>
+                            <SelectTrigger className="col-span-3 bg-slate-950 border-white/10 text-white">
+                                <SelectValue placeholder="Select province" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="AB">Alberta</SelectItem>
+                                <SelectItem value="BC">British Columbia</SelectItem>
+                                <SelectItem value="MB">Manitoba</SelectItem>
+                                <SelectItem value="NB">New Brunswick</SelectItem>
+                                <SelectItem value="NL">Newfoundland and Labrador</SelectItem>
+                                <SelectItem value="NS">Nova Scotia</SelectItem>
+                                <SelectItem value="ON">Ontario</SelectItem>
+                                <SelectItem value="PE">Prince Edward Island</SelectItem>
+                                <SelectItem value="QC">Quebec</SelectItem>
+                                <SelectItem value="SK">Saskatchewan</SelectItem>
+                                <SelectItem value="NT">Northwest Territories</SelectItem>
+                                <SelectItem value="NU">Nunavut</SelectItem>
+                                <SelectItem value="YT">Yukon</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 <DialogFooter>
