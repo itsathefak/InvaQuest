@@ -28,6 +28,26 @@ export async function GET(request: Request) {
         )
         const { error } = await supabase.auth.exchangeCodeForSession(code)
         if (!error) {
+            // Get the authenticated user
+            const { data: { user } } = await supabase.auth.getUser()
+
+            if (user) {
+                // Extract name and avatar from user metadata (provided by OAuth providers like Google)
+                const fullName = user.user_metadata?.full_name || user.user_metadata?.name
+                const avatarUrl = user.user_metadata?.avatar_url || user.user_metadata?.picture
+
+                // Update the profile with OAuth data if available
+                if (fullName || avatarUrl) {
+                    await supabase
+                        .from('profiles')
+                        .update({
+                            full_name: fullName || null,
+                            avatar_url: avatarUrl || null,
+                        })
+                        .eq('id', user.id)
+                }
+            }
+
             return NextResponse.redirect(`${origin}${next}`)
         }
     }
