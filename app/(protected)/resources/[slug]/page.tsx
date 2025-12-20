@@ -11,8 +11,9 @@ export async function generateStaticParams() {
     }));
 }
 
-export default function ResourceArticlePage({ params }: { params: { slug: string } }) {
-    const resource = resources.resources.find((r) => r.slug === params.slug);
+export default async function ResourceArticlePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params;
+    const resource = resources.resources.find((r) => r.slug === slug);
 
     if (!resource) {
         notFound();
