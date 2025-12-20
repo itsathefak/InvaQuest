@@ -1,12 +1,33 @@
--- Migration to sync display_name to full_name for existing users
--- This ensures consistency across the profiles table
+-- Migration to sync OAuth profile pictures for existing users
+-- This pulls avatar URLs from auth.users metadata into profiles
 
--- First, update any NULL full_name values with display_name if it exists
-UPDATE public.profiles
-SET full_name = display_name
-WHERE full_name IS NULL AND display_name IS NOT NULL;
+-- Update avatar_url for users who don't have one set
+-- by pulling from their OAuth metadata (Google, etc.)
+UPDATE public.profiles p
+SET avatar_url = COALESCE(
+  u.raw_user_meta_data->>'avatar_url',
+  u.raw_user_meta_data->>'picture'
+)
+FROM auth.users u
+WHERE p.id = u.id
+  AND p.avatar_url IS NULL
+  AND (
+    u.raw_user_meta_data->>'avatar_url' IS NOT NULL
+    OR u.raw_user_meta_data->>'picture' IS NOT NULL
+  );
 
--- Also update the trigger to handle both fields going forward
+-- Also sync full_name if needed
+UPDATE public.profiles p
+SET full_name = COALESCE(
+  u.raw_user_meta_data->>'full_name',
+  u.raw_user_meta_data->>'name',
+  p.display_name
+)
+FROM auth.users u
+WHERE p.id = u.id
+  AND p.full_name IS NULL;
+
+-- Update the trigger for future sign-ups
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER
 LANGUAGE plpgsql
