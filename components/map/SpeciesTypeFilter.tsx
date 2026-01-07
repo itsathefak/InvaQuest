@@ -3,6 +3,13 @@
 import * as React from "react";
 import { type SpeciesCategory } from "@/types";
 import { cn } from "@/lib/utils";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface SpeciesTypeFilterProps {
     selectedCategory: string;
@@ -25,19 +32,22 @@ export function SpeciesTypeFilter({
         { label: "Pathogens", value: "pathogen" },
     ];
 
+    const selectedLabel = categories.find(c => c.value === selectedCategory)?.label || "All Types";
+
     return (
-        <div className={cn("inline-flex rounded-lg bg-slate-900/80 p-2 shadow-sm backdrop-blur-md border border-white/10", className)}>
-            <select
-                className="h-9 rounded-md border border-white/10 bg-slate-800 px-3 py-1 text-sm text-white shadow-sm ring-offset-slate-900 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                value={selectedCategory}
-                onChange={(e) => onCategoryChange(e.target.value)}
-            >
+        <Select value={selectedCategory} onValueChange={onCategoryChange}>
+            <SelectTrigger className={cn("w-[160px] bg-slate-900/90 border-white/10 text-white shadow-lg", className)}>
+                <SelectValue placeholder="Select Type">
+                    {selectedLabel}
+                </SelectValue>
+            </SelectTrigger>
+            <SelectContent className="bg-slate-900 border-white/10 text-white">
                 {categories.map((cat) => (
-                    <option key={cat.value} value={cat.value}>
+                    <SelectItem key={cat.value} value={cat.value}>
                         {cat.label}
-                    </option>
+                    </SelectItem>
                 ))}
-            </select>
-        </div>
+            </SelectContent>
+        </Select>
     );
 }

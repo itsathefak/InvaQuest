@@ -126,7 +126,7 @@ export default function MapPage() {
                 </div>
 
                 {/* Filters */}
-                <div className="pointer-events-auto flex flex-wrap gap-2">
+                <div className="pointer-events-auto flex flex-col md:flex-row md:flex-wrap gap-2">
                     <RegionFilter
                         regions={regionsData as Region[]}
                         selectedRegionId={selectedRegionId}
@@ -135,7 +135,7 @@ export default function MapPage() {
 
                     {mapSource === 'community' && (
                         <Select value={timeRange} onValueChange={(v: 'all' | '30d' | '7d') => setTimeRange(v)}>
-                            <SelectTrigger className="w-[140px] bg-slate-900/90 border-white/10 text-white shadow-lg">
+                            <SelectTrigger className="w-[160px] bg-slate-900/90 border-white/10 text-white shadow-lg">
                                 <Clock className="w-4 h-4 mr-2 text-slate-400" />
                                 <SelectValue placeholder="Time Range" />
                             </SelectTrigger>

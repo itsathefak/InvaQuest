@@ -4,6 +4,13 @@ import * as React from "react";
 import { type Region } from "@/types";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 interface RegionFilterProps {
     regions: Region[];
@@ -18,52 +25,55 @@ export function RegionFilter({
     onRegionChange,
     className,
 }: RegionFilterProps) {
-    // We can group them or just list common ones.
-    // For MVP: Default View (Ontario), All Canada, then dropdown for others if needed.
-    // We'll simplistic "Pill" list for top regions + select.
+    // Get selected region name for display
+    const selectedRegion = regions.find(r => r.id === selectedRegionId);
+    const displayValue = selectedRegionId === "ALL" ? "All Canada" : selectedRegion?.name || "Select Province";
 
     const topRegions = regions.filter((r) => r.isDefault || r.shortCode === "BC" || r.shortCode === "QC");
     const otherRegions = regions.filter((r) => !topRegions.includes(r));
 
     return (
-        <div className={cn("flex flex-col gap-2 rounded-lg bg-slate-900/80 p-2 shadow-sm backdrop-blur-md border border-white/10 w-full max-w-md", className)}>
-            {/* First Row: All Canada + Top Regions */}
-            <div className="grid grid-cols-3 gap-2">
+        <>
+            {/* Mobile: Single Dropdown */}
+            <div className={cn("md:hidden", className)}>
+                <Select value={selectedRegionId} onValueChange={onRegionChange}>
+                    <SelectTrigger className="w-[160px] bg-slate-900/90 border-white/10 text-white shadow-lg">
+                        <SelectValue placeholder="Select Province">
+                            {displayValue}
+                        </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-slate-900 border-white/10 text-white">
+                        <SelectItem value="ALL">All Canada</SelectItem>
+                        {regions.map((region) => (
+                            <SelectItem key={region.id} value={region.id}>
+                                {region.name}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            </div>
+
+            {/* Desktop: Button Layout */}
+            <div className={cn("hidden md:flex flex-wrap gap-2 rounded-lg bg-slate-900/80 p-2 shadow-sm backdrop-blur-md border border-white/10", className)}>
                 <Button
                     variant={selectedRegionId === "ALL" ? "default" : "secondary"}
                     size="sm"
                     onClick={() => onRegionChange("ALL")}
-                    className="w-full whitespace-nowrap text-xs sm:text-sm"
                 >
                     All Canada
                 </Button>
-                {topRegions.slice(0, 2).map((region) => (
+                {topRegions.map((region) => (
                     <Button
                         key={region.id}
                         variant={selectedRegionId === region.id ? "default" : "outline"}
                         size="sm"
                         onClick={() => onRegionChange(region.id)}
-                        className="w-full whitespace-nowrap text-xs sm:text-sm"
                     >
                         {region.name}
                     </Button>
                 ))}
-            </div>
-
-            {/* Second Row: Third Top Region + Other Provinces Dropdown */}
-            <div className="grid grid-cols-2 gap-2">
-                {topRegions[2] && (
-                    <Button
-                        variant={selectedRegionId === topRegions[2].id ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => onRegionChange(topRegions[2].id)}
-                        className="w-full whitespace-nowrap text-xs sm:text-sm"
-                    >
-                        {topRegions[2].name}
-                    </Button>
-                )}
                 <select
-                    className="h-9 rounded-md border border-input bg-background px-2 py-1 text-xs sm:text-sm shadow-sm ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full"
+                    className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                     value={otherRegions.some(r => r.id === selectedRegionId) ? selectedRegionId : ""}
                     onChange={(e) => {
                         if (e.target.value) onRegionChange(e.target.value);
@@ -77,6 +87,6 @@ export function RegionFilter({
                     ))}
                 </select>
             </div>
-        </div>
+        </>
     );
 }
