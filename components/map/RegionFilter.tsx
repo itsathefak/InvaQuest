@@ -26,38 +26,57 @@ export function RegionFilter({
     const otherRegions = regions.filter((r) => !topRegions.includes(r));
 
     return (
-        <div className={cn("flex flex-wrap gap-2 rounded-lg bg-slate-900/80 p-2 shadow-sm backdrop-blur-md border border-white/10", className)}>
-            <Button
-                variant={selectedRegionId === "ALL" ? "default" : "secondary"}
-                size="sm"
-                onClick={() => onRegionChange("ALL")}
-            >
-                All Canada
-            </Button>
-            {topRegions.map((region) => (
+        <div className={cn("flex flex-col gap-2 rounded-lg bg-slate-900/80 p-2 shadow-sm backdrop-blur-md border border-white/10 w-full max-w-md", className)}>
+            {/* First Row: All Canada + Top Regions */}
+            <div className="grid grid-cols-3 gap-2">
                 <Button
-                    key={region.id}
-                    variant={selectedRegionId === region.id ? "default" : "outline"}
+                    variant={selectedRegionId === "ALL" ? "default" : "secondary"}
                     size="sm"
-                    onClick={() => onRegionChange(region.id)}
+                    onClick={() => onRegionChange("ALL")}
+                    className="w-full whitespace-nowrap text-xs sm:text-sm"
                 >
-                    {region.name}
+                    All Canada
                 </Button>
-            ))}
-            <select
-                className="h-9 rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                value={otherRegions.some(r => r.id === selectedRegionId) ? selectedRegionId : ""}
-                onChange={(e) => {
-                    if (e.target.value) onRegionChange(e.target.value);
-                }}
-            >
-                <option value="" disabled>Other Provinces</option>
-                {otherRegions.map((region) => (
-                    <option key={region.id} value={region.id}>
+                {topRegions.slice(0, 2).map((region) => (
+                    <Button
+                        key={region.id}
+                        variant={selectedRegionId === region.id ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => onRegionChange(region.id)}
+                        className="w-full whitespace-nowrap text-xs sm:text-sm"
+                    >
                         {region.name}
-                    </option>
+                    </Button>
                 ))}
-            </select>
+            </div>
+
+            {/* Second Row: Third Top Region + Other Provinces Dropdown */}
+            <div className="grid grid-cols-2 gap-2">
+                {topRegions[2] && (
+                    <Button
+                        variant={selectedRegionId === topRegions[2].id ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => onRegionChange(topRegions[2].id)}
+                        className="w-full whitespace-nowrap text-xs sm:text-sm"
+                    >
+                        {topRegions[2].name}
+                    </Button>
+                )}
+                <select
+                    className="h-9 rounded-md border border-input bg-background px-2 py-1 text-xs sm:text-sm shadow-sm ring-offset-background focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring w-full"
+                    value={otherRegions.some(r => r.id === selectedRegionId) ? selectedRegionId : ""}
+                    onChange={(e) => {
+                        if (e.target.value) onRegionChange(e.target.value);
+                    }}
+                >
+                    <option value="" disabled>Other Provinces</option>
+                    {otherRegions.map((region) => (
+                        <option key={region.id} value={region.id}>
+                            {region.name}
+                        </option>
+                    ))}
+                </select>
+            </div>
         </div>
     );
 }
