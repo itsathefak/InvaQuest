@@ -52,7 +52,7 @@ export default function FeedPage() {
             // Optimistic update
             setPosts([newPost, ...posts]);
             // Persist
-            await createPost(newPost.content, newPost.imageUrl);
+            await createPost(newPost.content, newPost.imageUrl, newPost.location);
             // Re-fetch ONLY posts, not user
             await loadPosts();
         } catch (e) {

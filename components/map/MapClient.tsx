@@ -7,6 +7,7 @@ import { type Sighting } from "@/types";
 import { cn } from "@/lib/utils";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Trash2 } from "lucide-react";
+import { SightingDetailDialog } from "@/components/map/SightingDetailDialog";
 
 interface MapClientProps {
     sightings: Sighting[];
@@ -28,6 +29,7 @@ export default function MapClient({
     onDataRefresh
 }: MapClientProps) {
     const [selectedSighting, setSelectedSighting] = React.useState<Sighting | null>(null);
+    const [detailOpen, setDetailOpen] = React.useState(false);
 
     return (
         <div className={cn("relative h-full w-full overflow-hidden rounded-xl border border-white/10 shadow-inner group", className)}>
@@ -58,7 +60,26 @@ export default function MapClient({
                         anchor="bottom"
                         onClick={(e) => {
                             e.originalEvent.stopPropagation();
-                            setSelectedSighting(sighting);
+                            // If it's a community sighting (status can be verified/rejected/pending), suggest full modal
+                            // Assuming all map sightings here are compatible with our new flow
+                            // OR we check if speciesId is null (community) vs present (official)
+
+                            // For official data (has speciesId), we might still want small popup? 
+                            // But user asked for "community sightings" modal.
+                            // Let's us separate logic:
+
+                            if (sighting.speciesId) {
+                                // Official sighting -> keep small popup logic or different handling?
+                                // For now, let's just create a unified experience or rely on DetailDialog handling it (it can handle basic info)
+                                // But DetailDialog expects CommunitySighting structure mostly. 
+                                // Let's Map it.
+                                setSelectedSighting(sighting);
+                            } else {
+                                // Community sighting
+                                setSelectedSighting(sighting);
+                                setDetailOpen(true);
+                            }
+
                             onSightingClick?.(sighting);
                         }}
                     >
@@ -67,14 +88,14 @@ export default function MapClient({
                                 "w-6 h-6 rounded-full border-2 border-white shadow-lg flex items-center justify-center",
                                 sighting.status === 'confirmed' ? "bg-red-500" : "bg-yellow-500"
                             )}>
-                                {/* Small icon or dot */}
                                 <div className="w-2 h-2 rounded-full bg-white" />
                             </div>
                         </div>
                     </Marker>
                 ))}
 
-                {selectedSighting && (
+                {/* Only show Popup for OFFICIAL sightings (speciesId present) */}
+                {selectedSighting && selectedSighting.speciesId && (
                     <Popup
                         longitude={selectedSighting.coordinates.lng}
                         latitude={selectedSighting.coordinates.lat}
@@ -86,7 +107,7 @@ export default function MapClient({
                         maxWidth="300px"
                     >
                         <div className="p-0 min-w-[240px] max-w-[260px]">
-                            {/* Image Header */}
+                            {/* Shortened popup logic for official data only */}
                             {(selectedSighting.photoUrl || selectedSighting.species?.imageKey) && (
                                 <div className="w-full h-24 relative mb-2 rounded-t-md overflow-hidden bg-slate-100">
                                     <img
@@ -94,19 +115,8 @@ export default function MapClient({
                                         alt={selectedSighting.species?.commonName || "Species"}
                                         className="w-full h-full object-cover"
                                     />
-                                    <div className="absolute top-2 right-2 flex gap-1">
-                                        <span className={cn(
-                                            "px-2 py-0.5 rounded-full text-[10px] uppercase font-bold shadow-sm backdrop-blur-md",
-                                            selectedSighting.status === 'confirmed'
-                                                ? "bg-red-500/90 text-white"
-                                                : "bg-yellow-400/90 text-black"
-                                        )}>
-                                            {selectedSighting.status}
-                                        </span>
-                                    </div>
                                 </div>
                             )}
-
                             <div className="px-3 pb-3">
                                 <h3 className="font-bold text-base leading-tight">
                                     {selectedSighting.species?.commonName || "Unknown Species"}
@@ -116,54 +126,29 @@ export default function MapClient({
                                         {selectedSighting.species.scientificName}
                                     </p>
                                 )}
-
-                                {selectedSighting.notes && (
-                                    <p className="text-xs text-slate-700 mb-2 line-clamp-3">
-                                        {selectedSighting.notes}
-                                    </p>
-                                )}
-
-                                <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-100">
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-4 h-4 rounded-full bg-slate-200 flex items-center justify-center text-[8px] font-bold text-slate-500">
-                                            {(selectedSighting.userId === 'system') ? 'S' : 'U'}
-                                        </div>
-                                        <span className="text-[10px] text-slate-400 uppercase font-medium">
-                                            {selectedSighting.userId === 'system' ? 'Official Record' : `User: ${selectedSighting.userId.slice(0, 6)}`}
-                                        </span>
-                                    </div>
-                                    <span className="text-[10px] text-slate-400">
-                                        {new Date(selectedSighting.createdAt).toLocaleDateString()}
-                                    </span>
+                                <div className="mt-2 text-xs text-slate-500">
+                                    Official Record via InvaQuest
                                 </div>
-
-                                {user && user.id === selectedSighting.userId && (
-                                    <button
-                                        onClick={async (e) => {
-                                            e.stopPropagation();
-                                            if (confirm("Delete this sighting?")) {
-                                                const { deletePost } = await import("@/lib/feed");
-                                                try {
-                                                    await deletePost(selectedSighting.id);
-                                                    setSelectedSighting(null);
-                                                    onDataRefresh?.();
-                                                } catch (err) {
-                                                    console.error("Failed to delete", err);
-                                                    alert("Failed to delete sighting");
-                                                }
-                                            }
-                                        }}
-                                        className="mt-3 w-full flex items-center justify-center gap-2 py-1.5 rounded bg-red-500/10 hover:bg-red-500/20 text-red-500 text-xs font-semibold transition-colors"
-                                    >
-                                        <Trash2 className="w-3 h-3" />
-                                        Delete Sighting
-                                    </button>
-                                )}
                             </div>
                         </div>
                     </Popup>
                 )}
             </Map>
+
+            {/* Community Sighting Detail Modal */}
+            <SightingDetailDialog
+                open={detailOpen}
+                onOpenChange={(open) => {
+                    setDetailOpen(open);
+                    if (!open) setSelectedSighting(null);
+                }}
+                sighting={!selectedSighting?.speciesId ? (selectedSighting as any) : null}
+                currentUserId={user?.id}
+                onDelete={() => {
+                    setDetailOpen(false);
+                    onDataRefresh?.();
+                }}
+            />
         </div >
     );
 }

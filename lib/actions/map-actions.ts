@@ -65,41 +65,23 @@ export async function getSightings(
             } : undefined
         }));
     } else {
-        // Community Sightings from Posts
-        let query = supabase
-            .from('posts')
-            .select(`
-                *,
-                user:profiles(*)
-            `)
-            .not('latitude', 'is', null)
-            .not('longitude', 'is', null)
-            .order('created_at', { ascending: false })
-            .limit(100);
+        // Community Sightings from new community_sightings table
+        const { getCommunitySightings } = await import('./community-sightings');
+        const communitySightings = await getCommunitySightings(timeRange);
 
-        if (dateCutoff) {
-            query = query.gte('created_at', dateCutoff);
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-            console.error("Error fetching community sightings:", error);
-            return [];
-        }
-
-        return data.map((p: any) => ({
-            id: p.id,
-            userId: p.user_id,
-            speciesId: null, // Posts don't strictly have species linked yet, treating as 'Unknown/Community'
-            photoUrl: p.image_url,
-            coordinates: { lat: p.latitude, lng: p.longitude },
-            country: p.user?.country || 'Canada',
-            province: p.user?.province || 'ON',
-            status: 'pending', // Community posts are unverified by default context
-            notes: p.content,
-            createdAt: p.created_at,
-            user: p.user
+        return communitySightings.map((s: any) => ({
+            id: s.id,
+            userId: s.user_id,
+            speciesId: null,
+            photoUrl: s.image_url,
+            coordinates: { lat: s.latitude, lng: s.longitude },
+            country: s.country || 'Canada',
+            province: s.province || 'ON',
+            status: s.status || 'pending',
+            notes: s.description,
+            createdAt: s.created_at,
+            speciesName: s.species_name,
+            user: s.user
         }));
     }
 }

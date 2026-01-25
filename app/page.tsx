@@ -13,6 +13,21 @@ export default async function Home() {
   const { data: { session } } = await supabase.auth.getSession();
   const user = session?.user;
 
+  // Fetch top 5 leaderboard players
+  const { data: topPlayers } = await supabase
+    .from('profiles')
+    .select('id, full_name, xp, avatar_url')
+    .order('xp', { ascending: false })
+    .limit(5);
+
+  const leaderboardPlayers = topPlayers?.map((player, index) => ({
+    rank: index + 1,
+    name: player.full_name || "Eco Warrior",
+    points: player.xp || 0,
+    badge: index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : undefined,
+    avatarUrl: player.avatar_url
+  })) || [];
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-950">
       {/* Navbar Stub - In real app, use TopNav */}
@@ -186,22 +201,26 @@ export default async function Home() {
               <p className="text-slate-400 mb-12">Compete with other conservationists across Canada</p>
 
               <div className="flex flex-wrap justify-center gap-6 mb-12">
-                {[
-                  { rank: 1, name: "EcoGuardian", points: 2450, badge: "🥇" },
-                  { rank: 2, name: "TreeHugger99", points: 2120, badge: "🥈" },
-                  { rank: 3, name: "BioBlitzKing", points: 1980, badge: "🥉" },
-                  { rank: 4, name: "NatureScout", points: 1850 },
-                  { rank: 5, name: "GreenWarrior", points: 1720 }
-                ].map((player) => (
+                {leaderboardPlayers.map((player) => (
                   <div key={player.rank} className="glass group relative flex flex-col items-center justify-center w-48 p-6 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all hover:scale-105 hover:shadow-[0_0_30px_rgba(6,147,136,0.2)]">
                     {player.rank <= 3 && (
                       <div className="absolute -top-3 -right-3 w-8 h-8 flex items-center justify-center rounded-full bg-slate-800 border border-white/10 shadow-lg text-lg animate-bounce">
                         {player.badge}
                       </div>
                     )}
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 mb-4 flex items-center justify-center text-xl font-bold text-white border-2 border-white/10 group-hover:border-primary/50 transition-colors">
-                      {player.name.substring(0, 1)}
-                    </div>
+                    {player.avatarUrl ? (
+                      <Image
+                        src={player.avatarUrl}
+                        alt={player.name}
+                        width={64}
+                        height={64}
+                        className="w-16 h-16 rounded-full mb-4 border-2 border-white/10 group-hover:border-primary/50 transition-colors object-cover"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 mb-4 flex items-center justify-center text-xl font-bold text-white border-2 border-white/10 group-hover:border-primary/50 transition-colors">
+                        {player.name.substring(0, 1)}
+                      </div>
+                    )}
                     <div className="text-3xl font-black text-white mb-1 flex items-baseline gap-1">
                       <span className="text-lg text-slate-500">#</span>{player.rank}
                     </div>

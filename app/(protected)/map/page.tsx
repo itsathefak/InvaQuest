@@ -5,11 +5,10 @@ import { MapContainer } from "@/components/map/MapContainer";
 import { RegionFilter } from "@/components/map/RegionFilter";
 import { SpeciesTypeFilter } from "@/components/map/SpeciesTypeFilter";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/ui/dialog"; // Added DialogTitle
-import { CreatePost } from "@/components/feed/CreatePost";
+import { ReportSightingDialog } from "@/components/map/ReportSightingDialog";
 import { PlusCircle, Map as MapIcon, Users } from "lucide-react";
 import regionsData from "@/data/regions.json";
-import { type Region, type Sighting, type User, type Post } from "@/types";
+import { type Region, type Sighting, type User } from "@/types";
 import { createClient } from "@/lib/supabase/client";
 
 import {
@@ -30,7 +29,7 @@ export default function MapPage() {
     const [timeRange, setTimeRange] = React.useState<'all' | '30d' | '7d'>('all');
     const [currentUser, setCurrentUser] = React.useState<User | null>(null);
     const [isReportOpen, setIsReportOpen] = React.useState(false);
-    const [clickedLocation, setClickedLocation] = React.useState<{ latitude: number; longitude: number } | undefined>(undefined);
+    const [clickedLocation, setClickedLocation] = React.useState<{ lat: number; lng: number } | undefined>(undefined);
 
     // Fetch user for reporting
     React.useEffect(() => {
@@ -74,10 +73,8 @@ export default function MapPage() {
         loadSightings();
     }, [mapSource, timeRange]);
 
-    const handlePostCreated = (post: Post) => {
+    const handleSightingCreated = () => {
         setIsReportOpen(false);
-        // Optimistically add to map or verify via reload
-        // Simplest for now: reload data
         loadSightings();
     };
 
@@ -94,7 +91,7 @@ export default function MapPage() {
 
     const handleMapClick = (coords: { lat: number; lng: number }) => {
         if (mapSource === 'community' && currentUser) {
-            setClickedLocation({ latitude: coords.lat, longitude: coords.lng });
+            setClickedLocation({ lat: coords.lat, lng: coords.lng });
             setIsReportOpen(true);
         }
     };
@@ -157,29 +154,21 @@ export default function MapPage() {
             {/* Report Button (Community Mode Only) */}
             {mapSource === 'community' && currentUser && (
                 <div className="absolute bottom-8 right-4 z-10 pointer-events-auto">
-                    <Dialog open={isReportOpen} onOpenChange={(open) => {
-                        setIsReportOpen(open);
-                        if (!open) setClickedLocation(undefined); // Reset on close
-                    }}>
-                        <DialogTrigger asChild>
-                            <Button
-                                size="lg"
-                                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-900/20 rounded-full h-14 px-6 animate-in slide-in-from-bottom-4"
-                                onClick={() => setClickedLocation(undefined)} // Reset if opening via button (current location)
-                            >
-                                <PlusCircle className="w-5 h-5 mr-2" />
-                                Report Sighting
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="bg-slate-900 border-white/10 text-white sm:max-w-xl">
-                            <DialogTitle className="text-xl font-bold mb-4">Report an Invasive Species</DialogTitle>
-                            <CreatePost
-                                user={currentUser}
-                                onPostCreated={handlePostCreated}
-                                initialLocation={clickedLocation}
-                            />
-                        </DialogContent>
-                    </Dialog>
+                    <Button
+                        size="lg"
+                        onClick={() => setIsReportOpen(true)}
+                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white shadow-lg shadow-purple-900/20 rounded-full h-14 px-6 animate-in slide-in-from-bottom-4"
+                    >
+                        <PlusCircle className="w-5 h-5 mr-2" />
+                        Report Sighting
+                    </Button>
+
+                    <ReportSightingDialog
+                        open={isReportOpen}
+                        onOpenChange={setIsReportOpen}
+                        location={clickedLocation || null}
+                        onSuccess={handleSightingCreated}
+                    />
                 </div>
             )}
 
